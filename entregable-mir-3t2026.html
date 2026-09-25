@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entregable MIR trimestral — Proyecto RASTROS (3T-2026)</title>
+<meta name="description" content="Entregable oficial trimestral para la MIR del Proyecto RASTROS (UNODC – Gobierno de Jalisco), tercer trimestre de 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          marino: '#003366',
+          unodc: '#009EDB',
+          fondo: '#F2F5F7',
+          fondo2: '#EAEFF3',
+          verde: '#1E8E5A',
+          ambar: '#F5A623',
+          rojo: '#D0021B'
+        },
+        fontFamily: {
+          sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Arial', 'sans-serif'],
+          cond: ['"Roboto Condensed"', '"Arial Narrow"', 'Arial', 'sans-serif']
+        }
+      }
+    }
+  };
+</script>
+<style>
+  :root {
+    --marino: #003366;
+    --unodc: #009EDB;
+    --fondo: #F2F5F7;
+    --fondo2: #EAEFF3;
+    --linea: #D6DEE6;
+    --texto: #1B2A3A;
+    --tenue: #5A6B7D;
+    --verde: #1E8E5A;
+    --ambar: #F5A623;
+    --rojo: #D0021B;
+  }
+  html { scroll-behavior: smooth; scroll-padding-top: 1.5rem; }
+  @media (max-width: 1023px) { html { scroll-padding-top: 3.75rem; } }
+  body { color: var(--texto); background: var(--fondo); font-feature-settings: "tnum" 1; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  :focus-visible { outline: 3px solid var(--unodc); outline-offset: 2px; border-radius: 2px; }
+
+  .cond { font-family: "Roboto Condensed", "Arial Narrow", Arial, sans-serif; }
+
+  /* Prosa del documento */
+  .prose-mir p { margin: 0 0 .9rem; line-height: 1.65; max-width: 72ch; }
+  .prose-mir h3 { font-family: "Roboto Condensed", Arial, sans-serif; font-weight: 700; font-size: 1.3rem; color: var(--marino); margin: 2.25rem 0 .75rem; line-height: 1.2; }
+  .prose-mir h4 { font-weight: 600; font-size: 1rem; color: var(--marino); margin: 1.5rem 0 .5rem; }
+  .prose-mir ol, .prose-mir ul { margin: 0 0 1rem 1.25rem; max-width: 72ch; }
+  .prose-mir ol { list-style: decimal; }
+  .prose-mir ul { list-style: disc; }
+  .prose-mir li { margin: .35rem 0; line-height: 1.6; padding-left: .25rem; }
+  .prose-mir strong { color: var(--marino); }
+
+  /* Tablas */
+  .tabla-wrap { overflow-x: auto; margin: 0 0 1.25rem; border: 1px solid var(--linea); border-radius: 6px; background: #fff; }
+  table.data { width: 100%; border-collapse: collapse; font-size: .875rem; line-height: 1.5; }
+  table.data thead th { background: var(--marino); color: #fff; text-align: left; font-weight: 600; padding: .65rem .8rem; vertical-align: bottom; white-space: nowrap; }
+  table.data td { padding: .6rem .8rem; border-top: 1px solid var(--linea); vertical-align: top; }
+  table.data tbody tr:nth-child(even) td { background: #F7F9FB; }
+  table.data td.id { font-family: "Roboto Condensed", Arial, sans-serif; font-weight: 600; color: var(--marino); white-space: nowrap; }
+  table.data td.num { font-family: "Roboto Condensed", Arial, sans-serif; font-weight: 600; text-align: right; white-space: nowrap; }
+  table.data th.num { text-align: right; }
+  table.kv td:first-child { font-weight: 600; color: var(--marino); width: 30%; min-width: 11rem; }
+  table.wide { min-width: 1100px; }
+  table.data code { font-size: .78rem; background: var(--fondo); border: 1px solid var(--linea); border-radius: 3px; padding: .05rem .3rem; word-break: break-all; }
+
+  /* Estatus */
+  .badge { display: inline-flex; align-items: center; gap: .4rem; font-size: .75rem; font-weight: 600; line-height: 1.2; padding: .2rem .55rem; border-radius: 999px; white-space: nowrap; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .badge::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; flex: none; }
+  .badge.ok { background: #E3F3EB; color: #16704A; }
+  .badge.ok::before { background: var(--verde); }
+  .badge.warn { background: #FEF3DC; color: #7A4F00; }
+  .badge.warn::before { background: var(--ambar); }
+  .badge.bad { background: #FDE7E9; color: #A30016; }
+  .badge.bad::before { background: var(--rojo); }
+  .badge.na { background: var(--fondo2); color: var(--tenue); }
+  .badge.na::before { background: #9AAABB; }
+
+  /* Código */
+  pre.code { background: #0B2B4C; color: #E4EEF7; border-radius: 6px; padding: 1rem 1.1rem; overflow-x: auto; font-size: .8rem; line-height: 1.55; margin: 0 0 1.25rem; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+  pre.code .cmt { color: #8FB3D1; }
+  .code-label { font-size: .8rem; font-weight: 600; color: var(--tenue); margin: 0 0 .4rem; }
+
+  /* Fórmulas */
+  .formula { background: #fff; border: 1px solid var(--linea); border-left: 4px solid var(--unodc); border-radius: 6px; padding: 1rem 1.25rem; margin: 0 0 1rem; overflow-x: auto; font-size: 1.05rem; }
+  .formula .fallback { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .9rem; }
+
+  /* Hoja de oficio */
+  .oficio { background: #fff; border: 1px solid var(--linea); border-radius: 6px; padding: 2rem clamp(1.1rem, 4vw, 2.75rem); }
+  .firma-marca { display: inline-block; font-family: "Roboto Condensed", Arial, sans-serif; font-weight: 700; color: var(--rojo); border: 1.5px solid var(--rojo); border-radius: 4px; padding: .15rem .6rem; font-size: .85rem; margin-bottom: 1rem; }
+  table.memo td { padding: .35rem 0; vertical-align: top; border: 0; }
+  table.memo td:first-child { font-weight: 700; color: var(--marino); width: 7.5rem; }
+
+  /* Plantilla de minuta */
+  .minuta { background: #fff; border: 1px solid var(--linea); border-radius: 6px; padding: 1.75rem clamp(1rem, 3.5vw, 2.25rem); }
+  .ph { color: #496A89; background: #EEF5FB; border-bottom: 1px dashed #7FB0D6; padding: 0 .2rem; border-radius: 2px; }
+  .minuta .seccion { border-top: 2px solid var(--marino); padding-top: .9rem; margin-top: 1.75rem; }
+  .minuta .seccion h4 { font-family: "Roboto Condensed", Arial, sans-serif; font-size: 1.05rem; margin: 0 0 .75rem; color: var(--marino); }
+  .firma-linea { border-bottom: 1px solid var(--texto); height: 2.5rem; }
+
+  /* Navegación */
+  .toc a { display: block; padding: .5rem .75rem; border-left: 3px solid transparent; color: #33475B; font-size: .875rem; line-height: 1.35; border-radius: 0 4px 4px 0; }
+  .toc a:hover { background: var(--fondo2); color: var(--marino); }
+  .toc a.activo { border-left-color: var(--unodc); background: #fff; color: var(--marino); font-weight: 600; }
+  .toc a .n { font-family: "Roboto Condensed", Arial, sans-serif; font-weight: 700; color: var(--unodc); margin-right: .35rem; }
+  @media (max-width: 1023px) {
+    .toc ul { display: flex; gap: .25rem; overflow-x: auto; white-space: nowrap; }
+    .toc a { border-left: 0; border-bottom: 3px solid transparent; border-radius: 0; padding: .6rem .75rem; }
+    .toc a.activo { border-bottom-color: var(--unodc); background: transparent; }
+  }
+
+  /* Barra ponderada de hitos */
+  .barra-hitos { display: flex; height: 2.75rem; border-radius: 4px; overflow: hidden; background: rgba(255,255,255,.12); }
+  .barra-hitos .seg { display: flex; align-items: center; justify-content: center; font-family: "Roboto Condensed", Arial, sans-serif; font-weight: 600; font-size: .78rem; color: #fff; border-right: 2px solid var(--marino); min-width: 0; overflow: hidden; white-space: nowrap; }
+  .barra-hitos .seg:last-child { border-right: 0; }
+  .barra-hitos .seg.ok { background: var(--verde); }
+  .barra-hitos .seg.warn { background: var(--ambar); color: #3A2600; }
+
+  .bloque-cab { display: flex; align-items: baseline; gap: .9rem; border-bottom: 2px solid var(--marino); padding-bottom: .6rem; margin-bottom: 1.5rem; }
+  .bloque-cab .num { font-family: "Roboto Condensed", Arial, sans-serif; font-weight: 700; font-size: 2.6rem; line-height: .9; color: var(--unodc); }
+  .bloque-cab h2 { font-family: "Roboto Condensed", Arial, sans-serif; font-weight: 700; font-size: clamp(1.5rem, 3vw, 2rem); color: var(--marino); line-height: 1.1; }
+  .bloque-cab .etq { display: block; font-size: .8rem; font-weight: 500; color: var(--tenue); font-family: Inter, sans-serif; margin-bottom: .15rem; }
+
+  .nota { font-size: .875rem; color: var(--tenue); }
+
+  /* Impresión */
+  @page { size: letter; margin: 15mm 13mm; }
+  @media print {
+    html, body { background: #fff !important; font-size: 10.5pt; }
+    .no-print { display: none !important; }
+    .layout { display: block !important; }
+    header.cabecera { background: #fff !important; color: var(--marino) !important; border-bottom: 3px solid var(--marino); padding: 0 0 10pt !important; }
+    header.cabecera * { color: var(--marino) !important; }
+    header.cabecera .barra-hitos { background: #fff; border: 1px solid var(--linea); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    header.cabecera .barra-hitos .seg { color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    header.cabecera .barra-hitos .seg.warn { color: #3A2600 !important; }
+    header.cabecera .estado { border-color: var(--linea) !important; background: #fff !important; }
+    main { padding: 0 !important; max-width: none !important; }
+    .bloque { break-before: page; padding-top: 0 !important; }
+    .bloque:first-of-type { break-before: auto; }
+    .tabla-wrap { overflow: visible; border-color: #B9C6D2; }
+    table.data { font-size: 8.5pt; }
+    table.wide { min-width: 0; }
+    table.data thead { display: table-header-group; }
+    table.data thead th { background: #E6ECF2 !important; color: var(--marino) !important; border-bottom: 1.5px solid var(--marino); white-space: normal; }
+    table.data tr, .formula, .oficio table.memo, pre.code, .minuta .seccion { break-inside: avoid; }
+    table.data tbody tr:nth-child(even) td { background: #fff !important; }
+    pre.code { background: #F2F5F7 !important; color: #000 !important; border: 1px solid #B9C6D2; white-space: pre-wrap; word-break: break-word; }
+    pre.code .cmt { color: #444 !important; }
+    .oficio, .minuta { border: 0; padding: 0; }
+    h2, h3, h4 { break-after: avoid; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body class="font-sans antialiased">
+
+<a href="#contenido" class="no-print sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 bg-white text-marino px-3 py-2 rounded">Ir al contenido</a>
+
+<!-- ============ CABECERA INSTITUCIONAL ============ -->
+<header class="cabecera bg-marino text-white">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 pt-5 pb-8">
+    <div class="no-print flex flex-wrap items-center justify-between gap-3 mb-8">
+      <a href="index.html" class="inline-flex items-center gap-2 text-sm font-medium text-white/90 hover:text-white border border-white/30 hover:border-white/70 rounded px-3 py-1.5">
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3 5 8l5 5"/></svg>
+        Volver al panel
+      </a>
+      <button type="button" onclick="window.print()" class="inline-flex items-center gap-2 text-sm font-semibold bg-unodc hover:bg-[#0089BF] text-white rounded px-3.5 py-1.5">
+        <svg aria-hidden="true" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 6V1.5h8V6M4 12H2.5A1 1 0 0 1 1.5 11V7A1 1 0 0 1 2.5 6h11a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H12M4 9.5h8v5H4z"/></svg>
+        Imprimir / Guardar en PDF
+      </button>
+    </div>
+
+    <div class="grid lg:grid-cols-[1fr_auto] gap-8 items-end">
+      <div>
+        <ul class="flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-white/80 mb-5" aria-label="Instituciones">
+          <li>Gobierno del Estado de Jalisco</li>
+          <li class="border-l border-white/30 pl-4">Coordinación General Estratégica de Seguridad</li>
+          <li class="border-l border-white/30 pl-4">Dirección General de Análisis y Políticas Públicas</li>
+          <li class="border-l border-white/30 pl-4">UNODC</li>
+        </ul>
+        <h1 class="cond font-bold text-[clamp(2rem,5vw,3.4rem)] leading-[1.02] tracking-tight max-w-3xl">Entregable MIR trimestral — Proyecto RASTROS</h1>
+        <p class="mt-3 text-lg text-white/85">Tercer trimestre de 2026 (julio–septiembre)</p>
+      </div>
+
+      <div class="estado border border-white/25 bg-white/5 rounded-md px-6 py-5 min-w-[17rem]">
+        <p class="text-sm text-white/75">Avance del indicador IAR</p>
+        <p class="cond font-bold text-[4.25rem] leading-none mt-1">85&nbsp;%</p>
+        <p class="mt-3"><span class="badge warn">Semáforo amarillo</span></p>
+        <p class="text-sm text-white/75 mt-3">Fecha de corte: septiembre de 2026</p>
+      </div>
+    </div>
+
+    <figure class="mt-9" aria-label="Composición ponderada del indicador: seis hitos cumplidos suman 85 %; el hito H3T-04 está en proceso">
+      <div class="barra-hitos">
+        <div class="seg ok" style="width:10%" title="H3T-01 · 10 % · Cumplido">H3T-01</div>
+        <div class="seg ok" style="width:10%" title="H3T-02 · 10 % · Cumplido">H3T-02</div>
+        <div class="seg ok" style="width:15%" title="H3T-03 · 15 % · Cumplido">H3T-03</div>
+        <div class="seg warn" style="width:15%" title="H3T-04 · 15 % · En proceso">H3T-04</div>
+        <div class="seg ok" style="width:20%" title="H3T-05 · 20 % · Cumplido">H3T-05</div>
+        <div class="seg ok" style="width:10%" title="H3T-06 · 10 % · Cumplido">H3T-06</div>
+        <div class="seg ok" style="width:20%" title="H3T-07 · 20 % · Cumplido">H3T-07</div>
+      </div>
+      <figcaption class="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-sm text-white/80">
+        <span>Cada tramo equivale a la ponderación del hito en el indicador.</span>
+        <span class="inline-flex items-center gap-2"><span class="inline-block w-3 h-3 rounded-sm bg-verde"></span>Cumplido (85 %)</span>
+        <span class="inline-flex items-center gap-2"><span class="inline-block w-3 h-3 rounded-sm bg-ambar"></span>En proceso (15 %)</span>
+      </figcaption>
+    </figure>
+  </div>
+</header>
+
+<div class="layout max-w-7xl mx-auto lg:grid lg:grid-cols-[15rem_1fr] lg:gap-10 px-0 lg:px-8">
+
+  <!-- ============ ÍNDICE ============ -->
+  <nav class="toc no-print sticky top-0 z-30 bg-fondo/95 backdrop-blur lg:bg-transparent lg:backdrop-blur-0 border-b border-[#D6DEE6] lg:border-0 lg:top-6 lg:self-start lg:pt-10" aria-label="Índice del documento">
+    <p class="hidden lg:block text-xs font-semibold text-[#5A6B7D] px-3 mb-2">Contenido</p>
+    <ul class="px-2 lg:px-0">
+      <li><a href="#bloque-1"><span class="n">1</span>Ficha técnica del indicador</a></li>
+      <li><a href="#bloque-2"><span class="n">2</span>Informe ejecutivo trimestral</a></li>
+      <li><a href="#bloque-3"><span class="n">3</span>Plantilla de minuta</a></li>
+      <li><a href="#bloque-4"><span class="n">4</span>Pestaña Control_Entregables_MIR</a></li>
+      <li><a href="#bloque-5"><span class="n">5</span>Guía de mantenimiento y pendientes</a></li>
+    </ul>
+  </nav>
+
+  <main id="contenido" class="px-5 lg:px-0 pb-24 min-w-0">
+
+    <p class="prose-mir mt-10 text-[1.05rem]"><span class="block max-w-[72ch] leading-relaxed">Con la ponderación propuesta, el indicador MIR del Proyecto RASTROS registra 85 % de avance al cierre del tercer trimestre de 2026, que coincide con el cierre del primer año de implementación del proyecto (semáforo amarillo); la conclusión del vetting complementario lo llevaría a 100 %.</span></p>
+
+    <!-- ================= BLOQUE 1 ================= -->
+    <section id="bloque-1" class="bloque pt-10">
+      <div class="bloque-cab">
+        <span class="num">1</span>
+        <h2><span class="etq">Bloque 1</span>Ficha técnica del indicador MIR</h2>
+      </div>
+      <div class="prose-mir">
+        <p>El indicador mide, cada trimestre, el porcentaje ponderado de hitos de coordinación cumplidos y respaldados con evidencia documental; la meta del periodo es 100 % de los hitos programados.</p>
+
+        <div class="tabla-wrap">
+          <table class="data kv">
+            <thead><tr><th>Elemento</th><th>Contenido</th></tr></thead>
+            <tbody>
+              <tr><td>Unidad responsable</td><td>Dirección General de Análisis y Políticas Públicas (DGAPP), Coordinación General Estratégica de Seguridad (CGES)</td></tr>
+              <tr><td>Alineación al Plan Estatal de Desarrollo y Gobernanza 2024-2030</td><td>Eje 1 "Jalisco tranquilo y en paz". Temática 1.4 "Justicia cercana que escucha y actúa": objetivo temático de reducir la impunidad mediante la consolidación de las dependencias especializadas y la profesionalización del personal para mejorar la investigación y persecución de los delitos; resultados R1.4.2 (instituciones de procuración de justicia con herramientas tecnológicas ágiles) y R1.4.4 (personal suficiente, capacitado y especializado); estrategia E1.4.2.1 (capacitación del personal en el uso de las tecnologías de la información). Temática 1.3 "Fortalecimiento a las corporaciones de seguridad": objetivo temático de profesionalización, certificación, equipamiento y tecnología del sistema policial.</td></tr>
+              <tr><td>Alineación con ODS y PND</td><td>ODS: metas 5.2, 16.1 y 16.3 (objetivo sectorial del Eje 1); metas 10.3, 16.5 y 16.6 (temática 1.4). Plan Nacional de Desarrollo 2025-2030: Eje 1 "Gobernanza con justicia y participación ciudadana", objetivos 1.3 y 1.5.</td></tr>
+              <tr><td>Alineación con RASTROS</td><td>Componente 1, fortalecer la capacidad de detección y procesamiento; componente 2, formación de formadores; componente 3, mejora de la cooperación nacional y regional. Periodo de implementación: 1 de octubre de 2025 al 30 de septiembre de 2027.</td></tr>
+              <tr><td>Nivel MIR</td><td>Componente</td></tr>
+              <tr><td>Nombre del componente</td><td>Mecanismo de coordinación interinstitucional y capacitación especializada para el combate a la trata de personas vinculada a estafas en línea, implementado</td></tr>
+              <tr><td>Resumen narrativo</td><td>Las autoridades policiales y ministeriales de Jalisco fortalecen la detección, investigación y procesamiento de los casos de trata de personas con fines de criminalidad forzada en operaciones de estafa en línea, mediante la coordinación interinstitucional que la CGES articula con UNODC.</td></tr>
+              <tr><td>Nombre del indicador</td><td>Porcentaje de avance en la implementación de la ruta estratégica del Proyecto RASTROS en Jalisco (IAR)</td></tr>
+              <tr><td>Definición</td><td>Proporción ponderada de hitos de coordinación programados en el trimestre que se cumplieron y cuentan con medio de verificación cargado en la base master.</td></tr>
+              <tr><td>Tipo / dimensión / sentido</td><td>Gestión / eficacia / ascendente</td></tr>
+              <tr><td>Unidad de medida</td><td>Porcentaje</td></tr>
+              <tr><td>Frecuencia</td><td>Trimestral, con meta acumulada anual</td></tr>
+              <tr><td>Supuestos</td><td>UNODC mantiene el financiamiento del Departamento de Estado de los EE. UU.; la Embajada de los EE. UU. (INL) resuelve el vetting en plazos compatibles con la programación; las dependencias designan y liberan al personal convocado.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Método de cálculo</h3>
+        <p>Indicador trimestral:</p>
+        <div class="formula" data-tex="IAR_t = \frac{\sum_{i=1}^{n} w_i \cdot c_i}{\sum_{i=1}^{n} w_i} \times 100"><span class="fallback">IAR_t = ( Σ w_i · c_i ) / ( Σ w_i ) × 100</span></div>
+        <p>Donde w<sub>i</sub> es la ponderación del hito i (la suma del trimestre es 100 %) y c<sub>i</sub> vale 1 cuando el hito está cumplido y su medio de verificación está cargado; en cualquier otro caso vale 0.</p>
+        <p>Avance acumulado anual:</p>
+        <div class="formula" data-tex="IAR_{anual} = \frac{\sum_{t} \sum_{i} w_{i,t} \cdot c_{i,t}}{\sum_{t} \sum_{i} w_{i,t}} \times 100"><span class="fallback">IAR_anual = ( Σ_t Σ_i w_(i,t) · c_(i,t) ) / ( Σ_t Σ_i w_(i,t) ) × 100</span></div>
+        <p>Se calcula sobre los trimestres transcurridos del ejercicio. Semaforización: <span class="badge ok">verde ≥ 90 %</span> <span class="badge warn">amarillo de 70 % a 89.9 %</span> <span class="badge bad">rojo &lt; 70 %</span></p>
+
+        <h3>Hitos y ponderación del 3T-2026 (julio–septiembre)</h3>
+        <div class="tabla-wrap">
+          <table class="data">
+            <thead><tr><th>ID</th><th>Hito</th><th>Vinculación RASTROS</th><th class="num">Ponderación</th><th>Estatus</th></tr></thead>
+            <tbody>
+              <tr><td class="id">H3T-01</td><td>Oficios CGES/1130/2026 (SSEJ) y CGES/0932/2026 (Fiscalía) emitidos y atendidos</td><td>Gestión habilitante</td><td class="num">10 %</td><td><span class="badge ok">Cumplido</span></td></tr>
+              <tr><td class="id">H3T-02</td><td>Postura institucional sin observaciones al Formulario de Levantamiento de Información, acusada por UNODC en el oficio REG/PROG/MEX/2026/140</td><td>Actividad 1.1</td><td class="num">10 %</td><td><span class="badge ok">Cumplido</span></td></tr>
+              <tr><td class="id">H3T-03</td><td>Vetting inicial remitido a UNODC (19 registros: 15 SSEJ y 4 Fiscalía)</td><td>Gestión habilitante</td><td class="num">15 %</td><td><span class="badge ok">Cumplido</span></td></tr>
+              <tr><td class="id">H3T-04</td><td>Vetting complementario (Policía Cibernética de la SSEJ y Vicefiscalía en Investigación Especializada en Delitos Patrimoniales) remitido y subsanado conforme a los criterios de UNODC</td><td>Gestión habilitante</td><td class="num">15 %</td><td><span class="badge warn">En proceso</span><br><span class="nota">Remitido; pendiente el campo de autorización del uso de la fuerza</span></td></tr>
+              <tr><td class="id">H3T-05</td><td>Convocatoria y realización de las sesiones del 31 de agosto y 1 de septiembre de 2026</td><td>Planeación de actividades 2026</td><td class="num">20 %</td><td><span class="badge ok">Cumplido</span></td></tr>
+              <tr><td class="id">H3T-06</td><td>Formulario de Levantamiento de Información aplicado, con hallazgos preliminares presentados por UNODC</td><td>Actividad 1.1</td><td class="num">10 %</td><td><span class="badge ok">Cumplido</span></td></tr>
+              <tr><td class="id">H3T-07</td><td>Mesa redonda del 10 de septiembre de 2026 realizada, con acuerdos registrados</td><td>Actividad 3.1</td><td class="num">20 %</td><td><span class="badge ok">Cumplido</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Avance del trimestre: 85 %. Al acreditarse H3T-04, el indicador alcanza 100 %.</p>
+
+        <h3>Línea base y metas</h3>
+        <div class="tabla-wrap">
+          <table class="data">
+            <thead><tr><th>Trimestre</th><th>Línea base / meta del IAR</th><th>Hitos del periodo</th></tr></thead>
+            <tbody>
+              <tr><td class="id">3T-2026 (julio–septiembre)</td><td>Línea base: 0 % (primer trimestre de medición). Meta: 100 %. Resultado: 85 %</td><td>Arranque, vetting, diagnóstico y sesiones presenciales (H3T-01 a H3T-07)</td></tr>
+              <tr><td class="id">4T-2026 (octubre–diciembre)</td><td>Meta: 100 %</td><td>Seguimiento de los 7 acuerdos del 10 de septiembre, cierre del vetting y preparación de la capacitación de 3 días (actividades 1.2 y 1.3)</td></tr>
+              <tr><td class="id">1T a 3T-2027 (enero–septiembre)</td><td>Meta: 100 % por trimestre</td><td>Capacitación, formación de formadores (componente 2) y cooperación nacional y regional (componente 3), hasta el cierre del proyecto el 30 de septiembre de 2027</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Vinculación con las metas del One Pager de UNODC</h3>
+        <div class="tabla-wrap">
+          <table class="data">
+            <thead><tr><th>Meta UNODC</th><th>Meta regional</th><th>Actividades RASTROS relacionadas</th></tr></thead>
+            <tbody>
+              <tr><td>Meta 1. Programas diseñados</td><td class="num">3</td><td>1.2 Desarrollo del programa de capacitación; 2.1 Programa de formación de formadores</td></tr>
+              <tr><td>Meta 2. Funcionarios capacitados</td><td class="num">75</td><td>1.3 Formación basada en escenarios prácticos</td></tr>
+              <tr><td>Meta 3. Investigaciones TIP/OSO</td><td class="num">15 (5 por país)</td><td>1.1 Indicadores de trata vinculada a criminalidad forzada; 3.2 Guías para investigaciones coordinadas</td></tr>
+              <tr><td>Meta 4. Redes de formadores (ToT) y materiales</td><td class="num">3 redes y 15 materiales</td><td>1.4 Herramientas pedagógicas; 2.2 Impartición de la formación de formadores</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Para Jalisco, la meta es de 25 funcionarios capacitados y 5 investigaciones TIP/OSO. Los hitos del 3T-2026 son de gestión y habilitan las cuatro metas, cuyo avance reporta UNODC.</p>
+
+        <h3>Indicador complementario</h3>
+        <p>Porcentaje de acuerdos interinstitucionales atendidos = (acuerdos atendidos con evidencia / acuerdos con vencimiento en el trimestre) × 100. Base: 7 acuerdos de la mesa del 10 de septiembre de 2026. Meta: 100 %.</p>
+
+        <h3>Medios de verificación</h3>
+        <ol>
+          <li>Oficios CGES/1130/2026, CGES/0932/2026, sus respuestas y el oficio UNODC REG/PROG/MEX/2026/140.</li>
+          <li>Correos de convocatoria del 4 y 17 de agosto de 2026 firmados por el Dr. Pedro Javier Carrasco Rueda Quijano.</li>
+          <li>Pestaña Vetting_Beneficiarios de RASTROS_UNODC_Master_DB y formatos VETTING_2026.xlsx remitidos.</li>
+          <li>Listas de asistencia de las sesiones del 31 de agosto, 1 de septiembre y 10 de septiembre de 2026.</li>
+          <li>Presentación de UNODC de la mesa redonda del 10 de septiembre de 2026, con los hallazgos preliminares del Formulario.</li>
+          <li>Minutas de trabajo con matriz de acuerdos (Bloque 3).</li>
+          <li>Ficha de validación trimestral: exportación en PDF de la pestaña Control_Entregables_MIR con la columna Aprobado_MIR.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================= BLOQUE 2 ================= -->
+    <section id="bloque-2" class="bloque pt-16">
+      <div class="bloque-cab">
+        <span class="num">2</span>
+        <h2><span class="etq">Bloque 2</span>Informe ejecutivo trimestral de avance</h2>
+      </div>
+
+      <article class="oficio prose-mir">
+        <span class="firma-marca">[FIRMA: DGAPP]</span>
+        <table class="memo mb-6">
+          <tbody>
+            <tr><td>Para</td><td>Roberto Alarcón Estrada, Coordinador General Estratégico de Seguridad</td></tr>
+            <tr><td>De</td><td>Dr. Pedro Javier Carrasco Rueda Quijano, Director General de Análisis y Políticas Públicas</td></tr>
+            <tr><td>Fecha</td><td>Septiembre de 2026</td></tr>
+            <tr><td>Asunto</td><td>Informe de avance del Proyecto RASTROS (UNODC), tercer trimestre de 2026</td></tr>
+            <tr><td>Referencia</td><td>Oficio UNODC REG/PROG/MEX/2026/140, del 30 de julio de 2026</td></tr>
+          </tbody>
+        </table>
+
+        <p>Se informa a usted que, al cierre del tercer trimestre de 2026, que coincide con el término del primer año de implementación del proyecto, el indicador de avance en la implementación de la ruta estratégica del Proyecto RASTROS registra 85 % de cumplimiento, con semáforo amarillo. El único hito en proceso corresponde al vetting complementario de la Fiscalía del Estado; al concluirse, el indicador alcanzaría 100 %.</p>
+
+        <h3>1. Antecedentes y justificación técnica</h3>
+        <p>RASTROS es una acción regional de la Oficina de las Naciones Unidas contra la Droga y el Delito (UNODC) para apoyar a los países en la lucha contra la trata de personas perpetrada a través de operaciones de estafa en línea. Se implementa del 1 de octubre de 2025 al 30 de septiembre de 2027 en Guatemala, México (Jalisco) y Perú, con financiamiento del Departamento de Estado de los EE. UU. En México lo ejecutan de manera conjunta el Programa contra la Trata de Personas en México y el Programa contra el Ciberdelito en México de UNODC.</p>
+        <p>El proyecto busca que las autoridades policiales y ministeriales detecten, investiguen y procesen con mayores capacidades los casos de trata de personas con fines de criminalidad forzada en operaciones de estafa en línea. Se organiza en tres componentes: fortalecimiento de la capacidad de detección y procesamiento, formación de formadores y mejora de la cooperación nacional y regional. Sus beneficiarios son el Ministerio Público, las policías, las unidades de policía cibernética y otras instancias que investigan esta modalidad delictiva.</p>
+        <p>En el ámbito internacional, el proyecto de resolución E/CN.15/2026/L.3 de la Comisión de Prevención del Delito y Justicia Penal (35.º periodo de sesiones, Viena, 1 a 5 de junio de 2026) encomienda a UNODC tareas de investigación, recopilación de datos, capacitación, elaboración de guías, asistencia técnica y coordinación con el sector privado y las plataformas digitales.</p>
+        <p>En el ámbito estatal, el proyecto contribuye al Eje 1 "Jalisco tranquilo y en paz" del Plan Estatal de Desarrollo y Gobernanza 2024-2030, en particular a la temática 1.4 "Justicia cercana que escucha y actúa", cuyos resultados R1.4.2 y R1.4.4 prevén instituciones de procuración de justicia con herramientas tecnológicas ágiles y personal capacitado y especializado.</p>
+        <p>La Coordinación General Estratégica de Seguridad articula la participación estatal porque el proyecto exige la concurrencia de la Secretaría de Seguridad del Estado, la Fiscalía del Estado y sus vicefiscalías, y la Unidad de Policía Cibernética. En este esquema, la Dirección General de Análisis y Políticas Públicas coordina y supervisa que las sesiones y el levantamiento de información se realicen; la administración de la información del Formulario corresponde a UNODC.</p>
+
+        <h3>2. Acciones implementadas en el trimestre</h3>
+        <p><strong>Gestión y concertación interinstitucional.</strong> Mediante los oficios CGES/1130/2026, del 23 de julio, y CGES/0932/2026 se solicitó a la Secretaría de Seguridad y a la Fiscalía del Estado el llenado del formato de vetting y la revisión del Formulario de Levantamiento de Información. La Secretaría respondió el 27 de julio sin observaciones al Formulario; la Fiscalía remitió su formato mediante el oficio FE.01.01/F-8192/31062/2026-XVIII. En el oficio REG/PROG/MEX/2026/140, UNODC acusó recibo del listado de vetting y constató que no hubo observaciones al Formulario.</p>
+        <p><strong>Vetting de servidores públicos.</strong> La CGES concentró los formatos y los remitió a UNODC, que gestiona la verificación ante la Embajada de los EE. UU. (INL).</p>
+        <div class="tabla-wrap">
+          <table class="data">
+            <thead><tr><th>Remesa</th><th>Dependencia</th><th>Estatus</th></tr></thead>
+            <tbody>
+              <tr><td class="id">Inicial</td><td>Secretaría de Seguridad</td><td>15 registros remitidos; acusados por UNODC el 30 de julio de 2026</td></tr>
+              <tr><td class="id">Inicial</td><td>Fiscalía del Estado (Unidad de Trata de Personas, VIEMNNA)</td><td>4 registros remitidos; acusados por UNODC el 30 de julio de 2026</td></tr>
+              <tr><td class="id">Complementaria</td><td>Secretaría de Seguridad (Policía Cibernética)</td><td>Recibido el 5 de agosto de 2026 y remitido a UNODC</td></tr>
+              <tr><td class="id">Complementaria</td><td>Fiscalía del Estado (Vicefiscalía en Investigación Especializada en Delitos Patrimoniales)</td><td>Recibido el 6 de agosto de 2026 y remitido; UNODC emitió los criterios de llenado el 7 de agosto; pendiente el campo de autorización del uso de la fuerza</td></tr>
+              <tr><td class="id">Designaciones</td><td>Secretaría de Seguridad (3 mandos para las sesiones de agosto y septiembre)</td><td>Formato anexo a la designación del 19 de agosto de 2026</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Diagnóstico situacional.</strong> UNODC puso en línea el Formulario de Levantamiento de Información (67 preguntas, respuesta anónima), en versión web y móvil, dirigido al personal de investigación de la Fiscalía y sus vicefiscalías, la Unidad de Policía Cibernética y la Secretaría de Seguridad, con fecha límite de respuesta el 4 de septiembre de 2026. En la mesa del 10 de septiembre, UNODC presentó los hallazgos preliminares de la sección de información general:</p>
+        <ul>
+          <li>La mitad de las respuestas proviene del Ministerio Público y del personal de la Fiscalía vinculado al combate a la trata de personas.</li>
+          <li>De ese grupo, 35 % tiene más de cinco años de antigüedad en el cargo y 30 % tiene menos de un año de experiencia en casos de estafas en línea.</li>
+          <li>De las 5 personas con más de cuatro años de experiencia en estafas en línea, solo 2 tienen experiencia en casos de trata de personas; 4 reportan alta exposición, en los últimos 24 meses, a casos con posible relación entre ambos delitos.</li>
+        </ul>
+        <p><strong>Sesiones y mesas de trabajo con UNODC.</strong> El 31 de agosto y el 1 de septiembre de 2026 se realizaron, en la Sala de Juntas de la CGES, la presentación del proyecto, la revisión de componentes y la planeación de actividades 2026.</p>
+        <p>El 10 de septiembre se efectuó la mesa redonda para complementar el Formulario, en el Salón La Tapatía del Best Western Plus Gran Hotel Centro Histórico, con 25 personas convocadas: 5 de la Fiscalía, 17 de la Secretaría de Seguridad y 3 de Escudo Urbano C5. Sus objetivos fueron validar los hallazgos preliminares, identificar casos, modalidades emergentes e indicadores no documentados en el instrumento, y definir las temáticas de la capacitación de tres días que impartirá UNODC.</p>
+        <p>La mesa analizó tres bloques: reclutamiento mediante ofertas laborales fraudulentas y redes sociales; mecanismos de engaño, control, endeudamiento y restricción de movilidad; y modalidades de estafa como las románticas, las inversiones fraudulentas, la suplantación de identidad, las criptomonedas y los call centers. UNODC expuso como casos de referencia un operativo en Perú (octubre de 2023) y la localización de cuatro personas en un presunto call center clandestino en Zapopan (12 de julio de 2026).</p>
+        <p>En la discusión se identificaron deficiencias en la tipificación penal de la trata de personas vinculada a criminalidad forzada, problemas de judicialización y falta de claridad normativa. Se adoptaron 7 acuerdos, enlistados en el apartado 5.</p>
+
+        <h3>3. Resultados cuantitativos del trimestre</h3>
+        <div class="tabla-wrap">
+          <table class="data">
+            <thead><tr><th>Concepto</th><th class="num">Programado</th><th class="num">Cumplido</th><th class="num">Avance</th><th>Semáforo</th></tr></thead>
+            <tbody>
+              <tr><td>Indicador IAR (hitos ponderados)</td><td class="num">100 %</td><td class="num">85 %</td><td class="num">85 %</td><td><span class="badge warn">Amarillo</span></td></tr>
+              <tr><td>Oficios de solicitud atendidos</td><td class="num">2</td><td class="num">2</td><td class="num">100 %</td><td><span class="badge ok">Verde</span></td></tr>
+              <tr><td>Sesiones presenciales realizadas</td><td class="num">3</td><td class="num">3</td><td class="num">100 %</td><td><span class="badge ok">Verde</span></td></tr>
+              <tr><td>Formulario aplicado con hallazgos preliminares</td><td class="num">1</td><td class="num">1</td><td class="num">100 %</td><td><span class="badge ok">Verde</span></td></tr>
+              <tr><td>Remesas de vetting remitidas a UNODC</td><td class="num">4</td><td class="num">4</td><td class="num">100 %</td><td><span class="badge ok">Verde</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>La remesa inicial suma 19 registros acusados por UNODC. De la mesa del 10 de septiembre derivaron 7 acuerdos, que se reportarán en el cuarto trimestre.</p>
+
+        <h3>4. Riesgos, cuellos de botella y medidas de mitigación</h3>
+        <div class="tabla-wrap">
+          <table class="data">
+            <thead><tr><th>Riesgo</th><th>Dependencia</th><th>Efecto</th><th>Mitigación</th></tr></thead>
+            <tbody>
+              <tr><td>Campo de autorización del uso de la fuerza pendiente en el formato de la Vicefiscalía en Investigación Especializada en Delitos Patrimoniales</td><td>Fiscalía del Estado</td><td>Retrasa la gestión del vetting ante la Embajada</td><td>Requerir la subsanación conforme a los criterios de UNODC del 7 de agosto de 2026</td></tr>
+              <tr><td>Diez registros comparten un mismo correo de contacto y dos usan dominio gmail</td><td>Secretaría de Seguridad</td><td>Posibles observaciones en la validación</td><td>Solicitar correos institucionales individuales</td></tr>
+              <tr><td>Cobertura de Escudo Urbano C5 y de la Secretaría de Inteligencia y Búsqueda de Personas bajo la cláusula de personal adicional del oficio REG/PROG/MEX/2026/140</td><td>UNODC</td><td>Incertidumbre sobre su participación en las capacitaciones</td><td>Solicitar confirmación por escrito a UNODC</td></tr>
+              <tr><td>Tiempos de verificación de la Embajada (INL) ajenos al control estatal</td><td>UNODC / Embajada</td><td>Desfase del calendario de capacitaciones</td><td>Solicitar a UNODC cortes periódicos de estatus</td></tr>
+              <tr><td>Brecha de especialización: 30 % del personal de Fiscalía con menos de un año de experiencia en estafas en línea y 2 de 5 perfiles experimentados con experiencia en trata</td><td>Fiscalía del Estado y Secretaría de Seguridad</td><td>Limita la detección de la criminalidad forzada</td><td>Orientar la capacitación de tres días a estas brechas</td></tr>
+              <tr><td>Deficiencias en la tipificación penal de la trata vinculada a criminalidad forzada y en la judicialización</td><td>Fiscalía del Estado</td><td>Dificulta el procesamiento de los casos</td><td>Incorporar el tema a los indicadores (actividad 1.1) y a las guías de investigación coordinada (actividad 3.2)</td></tr>
+              <tr><td>Dispersión en el seguimiento de los 7 acuerdos del 10 de septiembre</td><td>Todas</td><td>Rezago en el cuarto trimestre</td><td>Formalizar la matriz de acuerdos con responsable y fecha (Bloque 3)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>5. Compromisos y plan de trabajo para el cuarto trimestre de 2026</h3>
+        <p>Los responsables y las fechas de cada compromiso se asentarán en la minuta formal de la mesa del 10 de septiembre.</p>
+        <div class="tabla-wrap">
+          <table class="data">
+            <thead><tr><th>ID</th><th>Compromiso</th><th>Vinculación RASTROS</th></tr></thead>
+            <tbody>
+              <tr><td class="id">H4T-01</td><td>Elaborar el protocolo de canalización desde las líneas de emergencia</td><td>3.4 Vías de derivación a servicios de protección</td></tr>
+              <tr><td class="id">H4T-02</td><td>Compartir insumos analíticos de Escudo Urbano C5</td><td>1.1 Indicadores</td></tr>
+              <tr><td class="id">H4T-03</td><td>Diseñar campañas contra el reclutamiento en línea</td><td>Prevención</td></tr>
+              <tr><td class="id">H4T-04</td><td>Establecer la ruta de coordinación C5–Fiscalía–SSEJ</td><td>3.2 Investigaciones coordinadas</td></tr>
+              <tr><td class="id">H4T-05</td><td>Integrar los reportes telefónicos de C5 con los registros del CNI</td><td>1.1 Indicadores</td></tr>
+              <tr><td class="id">H4T-06</td><td>Concretar la mesa técnica de criptoactivos y blockchain</td><td>3.1 Mesas redondas</td></tr>
+              <tr><td class="id">H4T-07</td><td>Alinear la capacidad analítica de C5 con el área de análisis de la SSEJ</td><td>Componente 3</td></tr>
+              <tr><td class="id">H4T-08</td><td>Concluir el vetting complementario y obtener el estatus de verificación de la Embajada</td><td>Gestión habilitante</td></tr>
+              <tr><td class="id">H4T-09</td><td>Obtener de UNODC el informe final de resultados del Formulario</td><td>1.1 Indicadores</td></tr>
+              <tr><td class="id">H4T-10</td><td>Definir con UNODC las temáticas y el calendario de la capacitación de tres días</td><td>1.2 y 1.3 Programa y formación práctica</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Sin otro particular, se reitera a usted la disposición de esta Dirección General para ampliar la información que estime necesaria.</p>
+        <div class="mt-8">
+          <p class="font-semibold mb-10">Atentamente</p>
+          <p class="mb-0 font-semibold text-marino">Dr. Pedro Javier Carrasco Rueda Quijano</p>
+          <p>Director General de Análisis y Políticas Públicas</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= BLOQUE 3 ================= -->
+    <section id="bloque-3" class="bloque pt-16">
+      <div class="bloque-cab">
+        <span class="num">3</span>
+        <h2><span class="etq">Bloque 3</span>Plantilla de minuta de trabajo y memoria operativa</h2>
+      </div>
+      <div class="prose-mir">
+        <p>Formato único para todas las sesiones del proyecto; cada minuta firmada se carga en Drive y su enlace alimenta la columna Medio_Verificacion_URL_Drive. Los campos resaltados se llenan en cada sesión.</p>
+      </div>
+
+      <article class="minuta prose-mir">
+        <div class="text-center">
+          <p class="cond font-bold text-marino text-lg mb-1" style="max-width:none">GOBIERNO DEL ESTADO DE JALISCO</p>
+          <p class="text-sm text-[#5A6B7D] mx-auto" style="max-width:62ch">Coordinación General Estratégica de Seguridad, Fiscalía del Estado de Jalisco, Secretaría de Seguridad del Estado de Jalisco y Oficina de las Naciones Unidas contra la Droga y el Delito (UNODC)</p>
+          <p class="cond font-bold text-marino text-xl mt-5 mb-1" style="max-width:none">MINUTA DE TRABAJO Y MEMORIA OPERATIVA — PROYECTO RASTROS</p>
+          <p class="text-sm mx-auto" style="max-width:none">No. de minuta: RAS-<span class="ph">[AAAAMMDD]</span>-<span class="ph">[NN]</span></p>
+        </div>
+
+        <div class="seccion">
+          <h4>I. Datos generales de la sesión</h4>
+          <div class="tabla-wrap">
+            <table class="data kv">
+              <thead><tr><th>Campo</th><th>Registro</th></tr></thead>
+              <tbody>
+                <tr><td>Fecha</td><td><span class="ph">[DD de mes de AAAA]</span></td></tr>
+                <tr><td>Horario</td><td><span class="ph">[HH:MM]</span> a <span class="ph">[HH:MM]</span> horas</td></tr>
+                <tr><td>Sede</td><td><span class="ph">[Nombre del recinto y domicilio]</span></td></tr>
+                <tr><td>Modalidad</td><td><span class="ph">[Presencial / virtual / híbrida]</span></td></tr>
+                <tr><td>Convoca</td><td><span class="ph">[Dependencia y servidor público]</span></td></tr>
+                <tr><td>Fundamento</td><td><span class="ph">[Oficio o correo que da origen a la sesión]</span></td></tr>
+                <tr><td>Trimestre MIR</td><td><span class="ph">[AAAA-T#]</span></td></tr>
+                <tr><td>Hito MIR vinculado</td><td><span class="ph">[ID del hito en Control_Entregables_MIR]</span></td></tr>
+                <tr><td>Actividad RASTROS vinculada</td><td><span class="ph">[Número y nombre de la actividad, p. ej. 3.1 Mesas redondas con entidades de investigación]</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="seccion">
+          <h4>II. Registro de asistencia</h4>
+          <div class="tabla-wrap">
+            <table class="data">
+              <thead><tr><th>No.</th><th>Dependencia</th><th>Nombre</th><th>Cargo</th><th>Carácter (titular / enlace)</th><th>Correo institucional</th><th>Firma</th></tr></thead>
+              <tbody>
+                <tr><td class="id">1</td><td>Coordinación General Estratégica de Seguridad</td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td class="id">2</td><td>Secretaría de Seguridad del Estado</td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td class="id">3</td><td>Fiscalía del Estado</td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td class="id">4</td><td>Unidad de Policía Cibernética</td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td class="id">5</td><td>UNODC</td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td class="id">6</td><td><span class="ph">[Otra dependencia]</span></td><td></td><td></td><td></td><td></td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Personal convocado: <span class="ph">[N]</span>. Personal asistente: <span class="ph">[N]</span>. Porcentaje de asistencia: <span class="ph">[N]</span> %.</p>
+        </div>
+
+        <div class="seccion">
+          <h4>III. Objetivo de la reunión</h4>
+          <p><span class="ph">[Objetivo en una o dos oraciones, vinculado al componente MIR y a la meta UNODC correspondiente.]</span></p>
+        </div>
+
+        <div class="seccion">
+          <h4>IV. Desarrollo de la sesión</h4>
+          <ol>
+            <li><span class="ph">[Tema 1: exposición y conclusiones.]</span></li>
+            <li><span class="ph">[Tema 2: exposición y conclusiones.]</span></li>
+            <li><span class="ph">[Hallazgos o diagnóstico identificado.]</span></li>
+          </ol>
+        </div>
+
+        <div class="seccion">
+          <h4>V. Acuerdos específicos</h4>
+          <div class="tabla-wrap">
+            <table class="data">
+              <thead><tr><th>ID acuerdo</th><th>Compromiso</th><th>Dependencia responsable</th><th>Fecha límite</th><th>Medio de verificación</th><th>Estatus</th></tr></thead>
+              <tbody>
+                <tr><td class="id">RAS-[AAAAMMDD]-A01</td><td><span class="ph">[Acción concreta y verificable]</span></td><td><span class="ph">[Dependencia]</span></td><td><span class="ph">[DD/MM/AAAA]</span></td><td><span class="ph">[Documento que acredita el cumplimiento]</span></td><td><span class="ph">[Programado / en proceso / cumplido]</span></td></tr>
+                <tr><td class="id">RAS-[AAAAMMDD]-A02</td><td></td><td></td><td></td><td></td><td></td></tr>
+                <tr><td class="id">RAS-[AAAAMMDD]-A03</td><td></td><td></td><td></td><td></td><td></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="seccion">
+          <h4>VI. Asuntos pendientes para la siguiente sesión</h4>
+          <p><span class="ph">[Asunto, responsable y fecha propuesta.]</span></p>
+        </div>
+
+        <div class="seccion">
+          <h4>VII. Firmas de conformidad institucional</h4>
+          <p>Leída la presente minuta, las personas representantes de las dependencias participantes la firman de conformidad.</p>
+          <div class="grid sm:grid-cols-2 gap-x-10 gap-y-8 mt-6">
+            <div><div class="firma-linea"></div><p class="text-sm mt-2 mb-0"><span class="ph">[Nombre y cargo]</span></p><p class="text-sm font-semibold text-marino">Coordinación General Estratégica de Seguridad</p></div>
+            <div><div class="firma-linea"></div><p class="text-sm mt-2 mb-0"><span class="ph">[Nombre y cargo]</span></p><p class="text-sm font-semibold text-marino">Secretaría de Seguridad del Estado de Jalisco</p></div>
+            <div><div class="firma-linea"></div><p class="text-sm mt-2 mb-0"><span class="ph">[Nombre y cargo]</span></p><p class="text-sm font-semibold text-marino">Fiscalía del Estado de Jalisco</p></div>
+            <div><div class="firma-linea"></div><p class="text-sm mt-2 mb-0"><span class="ph">[Nombre y cargo]</span></p><p class="text-sm font-semibold text-marino">Oficina de las Naciones Unidas contra la Droga y el Delito</p></div>
+          </div>
+          <p class="nota mt-8">Elaboró: Luis Antonio De Anda Bautista, Encargado de Planes y Protocolos, DGAPP. Validó: Dr. Pedro Javier Carrasco Rueda Quijano, Director General de Análisis y Políticas Públicas.</p>
+        </div>
+      </article>
+    </section>
+
+    <!-- ================= BLOQUE 4 ================= -->
+    <section id="bloque-4" class="bloque pt-16">
+      <div class="bloque-cab">
+        <span class="num">4</span>
+        <h2><span class="etq">Bloque 4</span>Pestaña Control_Entregables_MIR (Google Sheets)</h2>
+      </div>
+      <div class="prose-mir">
+        <p>La pestaña se agrega a RASTROS_UNODC_Master_DB: el registro de hitos ocupa las columnas A a M y el panel de control, las columnas O y P. Un hito solo suma puntaje si está cumplido y tiene URL de evidencia cargada.</p>
+
+        <h3>Columnas del registro de hitos (fila 1 = encabezados)</h3>
+        <div class="tabla-wrap">
+          <table class="data">
+            <thead><tr><th>Col.</th><th>Encabezado</th><th>Tipo</th><th>Validación / regla</th></tr></thead>
+            <tbody>
+              <tr><td class="id">A</td><td><code>ID_Trimestre</code></td><td>Texto</td><td>Formato AAAA-T#, p. ej. 2026-T3</td></tr>
+              <tr><td class="id">B</td><td><code>ID_Hito</code></td><td>Texto</td><td>H3T-01, H4T-01…; reprogramados con sufijo -R</td></tr>
+              <tr><td class="id">C</td><td><code>Hito_Compromiso</code></td><td>Texto</td><td>Acción verificable</td></tr>
+              <tr><td class="id">D</td><td><code>Dependencia_Responsable</code></td><td>Lista</td><td>CGES/DGAPP; Secretaría de Seguridad; Fiscalía del Estado; Unidad de Policía Cibernética; Escudo Urbano C5; Secretaría de Inteligencia y Búsqueda de Personas; UNODC</td></tr>
+              <tr><td class="id">E</td><td><code>Meta_UNODC</code></td><td>Lista</td><td>Gestión; Meta 1; Meta 2; Meta 3; Meta 4</td></tr>
+              <tr><td class="id">F</td><td><code>Ponderacion_%</code></td><td>Porcentaje</td><td>0 % a 100 %; la suma por trimestre debe ser 100 %</td></tr>
+              <tr><td class="id">G</td><td><code>Estatus_Cumplimiento</code></td><td>Lista</td><td>Programado; En proceso; Cumplido; Reprogramado; Cancelado</td></tr>
+              <tr><td class="id">H</td><td><code>Fecha_Compromiso</code></td><td>Fecha</td><td>dd/mm/aaaa</td></tr>
+              <tr><td class="id">I</td><td><code>Fecha_Cumplimiento</code></td><td>Fecha</td><td>dd/mm/aaaa</td></tr>
+              <tr><td class="id">J</td><td><code>Medio_Verificacion_URL_Drive</code></td><td>URL</td><td>Enlace al documento en Drive</td></tr>
+              <tr><td class="id">K</td><td><code>Aprobado_MIR</code></td><td>Lista</td><td>Sí; No; En revisión</td></tr>
+              <tr><td class="id">L</td><td><code>Puntaje</code></td><td>Fórmula</td><td>Matricial en L1; no editar</td></tr>
+              <tr><td class="id">M</td><td><code>Alerta</code></td><td>Fórmula</td><td>Matricial en M1; no editar</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Las listas de D, E, G y K pueden alojarse en Listas_Catalogos y referenciarse como rango en la validación de datos.</p>
+
+        <h3>Fórmulas matriciales del registro</h3>
+        <p class="code-label">Celda L1 (sustituye el encabezado; calcula todas las filas)</p>
+<pre class="code"><code>={"Puntaje";ARRAYFORMULA(IF(A2:A="",,IF((G2:G="Cumplido")*(J2:J&lt;&gt;""),F2:F,0)))}</code></pre>
+        <p class="code-label">Celda M1</p>
+<pre class="code"><code>={"Alerta";ARRAYFORMULA(IF(A2:A="",,IF((G2:G="Cumplido")*(J2:J=""),"SIN EVIDENCIA",IF((G2:G&lt;&gt;"Cumplido")*(G2:G&lt;&gt;"Cancelado")*(H2:H&lt;&gt;"")*(H2:H&lt;TODAY()),"VENCIDO",IF((G2:G="Cumplido")*(K2:K&lt;&gt;"Sí"),"PENDIENTE DE VALIDACIÓN","OK")))))}</code></pre>
+
+        <h3>Panel de control (columnas O y P)</h3>
+        <div class="tabla-wrap">
+          <table class="data">
+            <thead><tr><th>Celda</th><th>Etiqueta (col. O)</th><th>Fórmula o valor (col. P)</th></tr></thead>
+            <tbody>
+              <tr><td class="id">P2</td><td>Trimestre en revisión</td><td>2026-T3 (lista desde la columna A)</td></tr>
+              <tr><td class="id">P3</td><td>Inicio del trimestre</td><td><code>=DATE(VALUE(LEFT(P2,4)),(VALUE(RIGHT(P2,1))-1)*3+1,1)</code></td></tr>
+              <tr><td class="id">P4</td><td>Fin del trimestre</td><td><code>=EOMONTH(P3,2)</code></td></tr>
+              <tr><td class="id">P5</td><td>Ponderación programada</td><td><code>=SUMIFS(F:F,A:A,P2)</code></td></tr>
+              <tr><td class="id">P6</td><td>Puntaje obtenido</td><td><code>=SUMIFS(L:L,A:A,P2)</code></td></tr>
+              <tr><td class="id">P7</td><td>Avance del indicador IAR</td><td><code>=IFERROR(P6/P5,0)</code></td></tr>
+              <tr><td class="id">P8</td><td>Semáforo</td><td><code>=IF(P5=0,"SIN DATOS",IF(P7&gt;=P23,"VERDE",IF(P7&gt;=P24,"AMARILLO","ROJO")))</code></td></tr>
+              <tr><td class="id">P9</td><td>Control de ponderaciones</td><td><code>=IF(ROUND(P5,4)=1,"OK","REVISAR: la suma no es 100 %")</code></td></tr>
+              <tr><td class="id">P10</td><td>Hitos aprobados MIR</td><td><code>=COUNTIFS(A:A,P2,K:K,"Sí")&amp;" de "&amp;COUNTIF(A:A,P2)</code></td></tr>
+              <tr><td class="id">P11</td><td>Hitos con alerta</td><td><code>=COUNTIFS(A:A,P2,M:M,"&lt;&gt;OK")</code></td></tr>
+              <tr><td class="id">O13</td><td>Verificación cruzada con pestañas fuente</td><td>(título)</td></tr>
+              <tr><td class="id">P14</td><td>Registros de vetting con estatus capturado</td><td><code>=COUNTA(INDEX(Vetting_Beneficiarios!A2:AZ,0,MATCH(P29,Vetting_Beneficiarios!A1:AZ1,0)))</code></td></tr>
+              <tr><td class="id">P15</td><td>Registros remitidos a UNODC</td><td><code>=COUNTIF(INDEX(Vetting_Beneficiarios!A2:AZ,0,MATCH(P29,Vetting_Beneficiarios!A1:AZ1,0)),P30)</code></td></tr>
+              <tr><td class="id">P16</td><td>% de vetting remitido</td><td><code>=IFERROR(P15/P14,0)</code></td></tr>
+              <tr><td class="id">P17</td><td>Sesiones realizadas en el trimestre</td><td>Ver fórmula P17 abajo</td></tr>
+              <tr><td class="id">P18</td><td>% de sesiones realizadas</td><td><code>=IFERROR(MIN(1,P17/P28),0)</code></td></tr>
+              <tr><td class="id">P19</td><td>Avance de la Meta 2 (capacitados / meta)</td><td>Ver fórmula P19 abajo</td></tr>
+              <tr><td class="id">P20</td><td>Índice consolidado de contraste</td><td><code>=P7*P25+P16*P26+P18*P27</code></td></tr>
+              <tr><td class="id">O22</td><td>Parámetros (capturar conforme a los encabezados de cada pestaña)</td><td>(título)</td></tr>
+              <tr><td class="id">P23</td><td>Umbral verde</td><td>90 %</td></tr>
+              <tr><td class="id">P24</td><td>Umbral amarillo</td><td>70 %</td></tr>
+              <tr><td class="id">P25</td><td>Peso de hitos en el índice de contraste</td><td>60 %</td></tr>
+              <tr><td class="id">P26</td><td>Peso del vetting</td><td>20 %</td></tr>
+              <tr><td class="id">P27</td><td>Peso de las sesiones</td><td>20 %</td></tr>
+              <tr><td class="id">P28</td><td>Sesiones programadas en el trimestre</td><td>3</td></tr>
+              <tr><td class="id">P29</td><td>Vetting_Beneficiarios: encabezado de la columna de estatus</td><td>Texto del encabezado</td></tr>
+              <tr><td class="id">P30</td><td>Vetting_Beneficiarios: valor que acredita la remisión</td><td>Valor de la lista de estatus</td></tr>
+              <tr><td class="id">P31</td><td>Mesas_de_Trabajo_y_Capacitaciones: encabezado de fecha</td><td>Texto del encabezado</td></tr>
+              <tr><td class="id">P32</td><td>Mesas_de_Trabajo_y_Capacitaciones: encabezado de estatus</td><td>Texto del encabezado</td></tr>
+              <tr><td class="id">P33</td><td>Mesas_de_Trabajo_y_Capacitaciones: valor de sesión realizada</td><td>Valor de la lista de estatus</td></tr>
+              <tr><td class="id">P34</td><td>Control_Metas_y_KPIs: encabezado del ID de meta</td><td>Texto del encabezado</td></tr>
+              <tr><td class="id">P35</td><td>Control_Metas_y_KPIs: ID de la Meta 2</td><td>Identificador de la fila</td></tr>
+              <tr><td class="id">P36</td><td>Control_Metas_y_KPIs: encabezado del valor programado</td><td>Texto del encabezado</td></tr>
+              <tr><td class="id">P37</td><td>Control_Metas_y_KPIs: encabezado del avance acumulado</td><td>Texto del encabezado</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="code-label">Fórmula P17</p>
+<pre class="code"><code>=COUNTIFS(INDEX(Mesas_de_Trabajo_y_Capacitaciones!A2:AZ,0,MATCH(P31,Mesas_de_Trabajo_y_Capacitaciones!A1:AZ1,0)),"&gt;="&amp;P3,INDEX(Mesas_de_Trabajo_y_Capacitaciones!A2:AZ,0,MATCH(P31,Mesas_de_Trabajo_y_Capacitaciones!A1:AZ1,0)),"&lt;="&amp;P4,INDEX(Mesas_de_Trabajo_y_Capacitaciones!A2:AZ,0,MATCH(P32,Mesas_de_Trabajo_y_Capacitaciones!A1:AZ1,0)),P33)</code></pre>
+        <p class="code-label">Fórmula P19</p>
+<pre class="code"><code>=IFERROR(INDEX(Control_Metas_y_KPIs!A2:AZ,MATCH(P35,INDEX(Control_Metas_y_KPIs!A2:AZ,0,MATCH(P34,Control_Metas_y_KPIs!A1:AZ1,0)),0),MATCH(P37,Control_Metas_y_KPIs!A1:AZ1,0))/INDEX(Control_Metas_y_KPIs!A2:AZ,MATCH(P35,INDEX(Control_Metas_y_KPIs!A2:AZ,0,MATCH(P34,Control_Metas_y_KPIs!A1:AZ1,0)),0),MATCH(P36,Control_Metas_y_KPIs!A1:AZ1,0)),0)</code></pre>
+        <p>Las fórmulas usan coma como separador de argumentos (configuración regional México). Si la hoja usa coma decimal, sustituir las comas por punto y coma. Las fórmulas localizan las columnas por nombre de encabezado, por lo que no dependen del orden de las pestañas fuente.</p>
+
+        <h3>Formato</h3>
+        <div class="tabla-wrap">
+          <table class="data">
+            <thead><tr><th>Elemento</th><th>Formato</th></tr></thead>
+            <tbody>
+              <tr><td>Fila 1 (A1:M1)</td><td>Relleno #003366, texto blanco en negritas; inmovilizar fila 1 y columnas A–B</td></tr>
+              <tr><td>Títulos del panel (O1, O13, O22)</td><td>Relleno #009EDB, texto blanco en negritas</td></tr>
+              <tr><td>Parámetros (P23:P37)</td><td>Relleno #F1F3F5; únicas celdas del panel editables</td></tr>
+              <tr><td>F, P7, P16, P18, P19, P20, P23:P27</td><td>Porcentaje con un decimal</td></tr>
+              <tr><td>H, I, P3, P4</td><td>Fecha dd/mm/aaaa</td></tr>
+              <tr><td>G = "Cumplido"</td><td>Texto verde en negritas</td></tr>
+              <tr><td>M = "VENCIDO" / P8 = "ROJO"</td><td>Relleno rojo claro, texto rojo oscuro</td></tr>
+              <tr><td>M = "SIN EVIDENCIA" / P8 = "AMARILLO"</td><td>Relleno #FFC20E</td></tr>
+              <tr><td>M = "PENDIENTE DE VALIDACIÓN"</td><td>Relleno #F1F3F5</td></tr>
+              <tr><td>P8 = "VERDE"</td><td>Relleno verde claro</td></tr>
+              <tr><td>L, M, P3:P20</td><td>Protegidas (solo el propietario edita)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Carga inicial del 3T-2026</h3>
+        <p>La columna J queda vacía hasta cargar las URL de Drive; mientras tanto, los hitos cumplidos muestran la alerta SIN EVIDENCIA y no suman puntaje.</p>
+        <div class="tabla-wrap">
+          <table class="data wide">
+            <thead><tr><th>ID_Trimestre</th><th>ID_Hito</th><th>Hito_Compromiso</th><th>Dependencia_Responsable</th><th>Meta_UNODC</th><th class="num">Ponderacion_%</th><th>Estatus_Cumplimiento</th><th>Fecha_Compromiso</th><th>Fecha_Cumplimiento</th><th>Medio_Verificacion_URL_Drive</th><th>Aprobado_MIR</th></tr></thead>
+            <tbody>
+              <tr><td>2026-T3</td><td class="id">H3T-01</td><td>Oficios CGES/1130/2026 y CGES/0932/2026 emitidos y atendidos</td><td>CGES/DGAPP</td><td>Gestión</td><td class="num">10%</td><td><span class="badge ok">Cumplido</span></td><td>29/07/2026</td><td></td><td></td><td><span class="badge warn">En revisión</span></td></tr>
+              <tr><td>2026-T3</td><td class="id">H3T-02</td><td>Postura sin observaciones al Formulario acusada en oficio REG/PROG/MEX/2026/140</td><td>CGES/DGAPP</td><td>Gestión</td><td class="num">10%</td><td><span class="badge ok">Cumplido</span></td><td>29/07/2026</td><td>30/07/2026</td><td></td><td><span class="badge warn">En revisión</span></td></tr>
+              <tr><td>2026-T3</td><td class="id">H3T-03</td><td>Vetting inicial remitido a UNODC (19 registros)</td><td>CGES/DGAPP</td><td>Gestión</td><td class="num">15%</td><td><span class="badge ok">Cumplido</span></td><td>29/07/2026</td><td>30/07/2026</td><td></td><td><span class="badge warn">En revisión</span></td></tr>
+              <tr><td>2026-T3</td><td class="id">H3T-04</td><td>Vetting complementario remitido y subsanado</td><td>Fiscalía del Estado</td><td>Gestión</td><td class="num">15%</td><td><span class="badge warn">En proceso</span></td><td>07/08/2026</td><td></td><td></td><td><span class="badge warn">En revisión</span></td></tr>
+              <tr><td>2026-T3</td><td class="id">H3T-05</td><td>Sesiones del 31/08 y 01/09/2026 realizadas</td><td>CGES/DGAPP</td><td>Gestión</td><td class="num">20%</td><td><span class="badge ok">Cumplido</span></td><td>01/09/2026</td><td>01/09/2026</td><td></td><td><span class="badge warn">En revisión</span></td></tr>
+              <tr><td>2026-T3</td><td class="id">H3T-06</td><td>Formulario aplicado, con hallazgos preliminares presentados por UNODC</td><td>CGES/DGAPP</td><td>Gestión</td><td class="num">10%</td><td><span class="badge ok">Cumplido</span></td><td>04/09/2026</td><td>10/09/2026</td><td></td><td><span class="badge warn">En revisión</span></td></tr>
+              <tr><td>2026-T3</td><td class="id">H3T-07</td><td>Mesa redonda del 10/09/2026 con acuerdos registrados</td><td>CGES/DGAPP</td><td>Gestión</td><td class="num">20%</td><td><span class="badge ok">Cumplido</span></td><td>10/09/2026</td><td>10/09/2026</td><td></td><td><span class="badge warn">En revisión</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Script opcional para proyectar el trimestre siguiente</h3>
+        <p>Se agrega como archivo nuevo en el proyecto de Apps Script del libro (junto a Codigo.gs). Copia al trimestre siguiente los hitos no cumplidos del trimestre indicado en P2, con estatus Reprogramado y sin ponderación, para que se reasigne.</p>
+<pre class="code"><code>function proyectarTrimestre() {
+  const libro = SpreadsheetApp.getActive();
+  const hoja = libro.getSheetByName('Control_Entregables_MIR');
+  const origen = String(hoja.getRange('P2').getValue());
+  const anio = Number(origen.slice(0, 4));
+  const trim = Number(origen.slice(-1));
+  const destino = trim === 4 ? (anio + 1) + '-T1' : anio + '-T' + (trim + 1);
+  const ultima = hoja.getRange('A:A').getValues().filter(String).length;
+  if (ultima &lt; 2) return;
+  const datos = hoja.getRange(2, 1, ultima - 1, 11).getValues();
+  const existentes = new Set(datos.filter(r =&gt; r[0] === destino).map(r =&gt; r[1]));
+  const nuevas = datos
+    .filter(r =&gt; r[0] === origen &amp;&amp; !['Cumplido', 'Cancelado'].includes(r[6]))
+    .map(r =&gt; [destino, r[1] + '-R', r[2], r[3], r[4], '', 'Reprogramado', '', '', '', 'En revisión'])
+    .filter(r =&gt; !existentes.has(r[1]));
+  if (nuevas.length) {
+    hoja.getRange(ultima + 1, 1, nuevas.length, 11).setValues(nuevas);
+  }
+  libro.toast(nuevas.length + ' hito(s) proyectado(s) a ' + destino);
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- ================= BLOQUE 5 ================= -->
+    <section id="bloque-5" class="bloque pt-16">
+      <div class="bloque-cab">
+        <span class="num">5</span>
+        <h2><span class="etq">Bloque 5</span>Guía de mantenimiento trimestre a trimestre</h2>
+      </div>
+      <div class="prose-mir">
+        <p>El cierre de cada trimestre consiste en cargar evidencias, actualizar estatus y congelar el panel; la apertura del siguiente reutiliza la misma pestaña y este documento, cambiando solo los campos variables. El proyecto concluye el 30 de septiembre de 2027, por lo que quedan cuatro trimestres por reportar (4T-2026 a 3T-2027).</p>
+
+        <h3>Cierre del 3T-2026</h3>
+        <ol>
+          <li>Crear en Drive la carpeta RASTROS_MIR_2026-T3 y subir oficios, correos, listas de asistencia, la presentación de UNODC del 10 de septiembre y las minutas firmadas.</li>
+          <li>Pegar en la columna J la URL de cada evidencia y verificar que P11 (hitos con alerta) no muestre SIN EVIDENCIA.</li>
+          <li>Actualizar H3T-04 en las columnas G e I cuando la Fiscalía remita el campo de autorización del uso de la fuerza.</li>
+          <li>Solicitar a UNODC el informe final de resultados del Formulario, el estatus de verificación del vetting y la confirmación de cobertura de Escudo Urbano C5 y de la Secretaría de Inteligencia y Búsqueda de Personas.</li>
+          <li>Formalizar la minuta del 10 de septiembre con la plantilla del Bloque 3, asignando responsable y fecha a los 7 acuerdos.</li>
+          <li>Capturar en P29:P37 los encabezados de las pestañas fuente y comprobar que P14 a P19 devuelvan valores y no errores.</li>
+          <li>Verificar que P9 indique OK.</li>
+          <li>Someter el registro a revisión del Dr. Carrasco y marcar Aprobado_MIR = Sí en los hitos validados.</li>
+          <li>Exportar la pestaña a PDF (ficha de validación trimestral) y guardarla en la carpeta del trimestre.</li>
+          <li>Trasladar a la tabla de resultados del Bloque 2 los valores de P7 y P8 y turnar el informe a firma.</li>
+          <li>Antes de citar el libro master como medio de verificación, restringir su acceso de edición (hoy está en una cuenta personal de Gmail con edición abierta desde las pruebas) o migrarlo al Drive institucional.</li>
+        </ol>
+
+        <h3>Apertura del 4T-2026 y trimestres siguientes</h3>
+        <ol>
+          <li>Cambiar P2 a 2026-T4 y ejecutar proyectarTrimestre desde el editor de Apps Script; los hitos pendientes pasan como Reprogramado.</li>
+          <li>Registrar los hitos nuevos (H4T-01 a H4T-10 del Bloque 2) y asignar ponderaciones hasta que P9 indique OK.</li>
+          <li>Actualizar P28 con las sesiones programadas del trimestre.</li>
+          <li>En este documento, generar la versión del trimestre: conservar los Bloques 3, 4 y 5 y actualizar solo los campos de la tabla siguiente.</li>
+          <li>En el 3T-2027, último trimestre del proyecto, agregar al informe el balance acumulado de los ocho trimestres de medición y el avance final de las cuatro metas UNODC.</li>
+        </ol>
+
+        <div class="tabla-wrap">
+          <table class="data">
+            <thead><tr><th>Campo</th><th>Ubicación</th><th>Fuente de actualización</th></tr></thead>
+            <tbody>
+              <tr><td>Hitos y ponderaciones del trimestre</td><td>Bloque 1, tabla de hitos</td><td>Control_Entregables_MIR, columnas B, C y F</td></tr>
+              <tr><td>Avance y semáforo</td><td>Lead, Bloque 1 y Bloque 2 (apartado 3)</td><td>Panel P7 y P8</td></tr>
+              <tr><td>Avance de las metas UNODC</td><td>Bloque 1, tabla de vinculación</td><td>Control_Metas_y_KPIs y reportes de UNODC</td></tr>
+              <tr><td>Acciones implementadas</td><td>Bloque 2, apartado 2</td><td>Minutas del trimestre y pestaña Vetting_Beneficiarios</td></tr>
+              <tr><td>Riesgos</td><td>Bloque 2, apartado 4</td><td>Columna M (alertas) y acuerdos vencidos</td></tr>
+              <tr><td>Compromisos del siguiente trimestre</td><td>Bloque 2, apartado 5</td><td>Hitos Programado del trimestre siguiente</td></tr>
+              <tr><td>Pendientes derivados</td><td>Cierre del documento</td><td>Alertas y acuerdos abiertos</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>El Bloque 1 solo cambia si se modifica la metodología (ponderación, umbrales o definición del indicador); cualquier cambio debe documentarse para mantener la comparabilidad entre trimestres.</p>
+
+        <h3 id="pendientes">Pendientes derivados</h3>
+        <div class="tabla-wrap">
+          <table class="data">
+            <thead><tr><th>No.</th><th>Pendiente</th><th>Responsable</th><th>Fecha</th></tr></thead>
+            <tbody>
+              <tr><td class="id">1</td><td>Cargar en Drive las evidencias de H3T-01 a H3T-07 y sus URL en la columna J</td><td>Luis Antonio De Anda Bautista</td><td>30/09/2026 (cierre del 3T-2026)</td></tr>
+              <tr><td class="id">2</td><td>Formalizar la minuta del 10/09/2026 con responsable y fecha de los 7 acuerdos</td><td>Luis Antonio De Anda Bautista</td><td>30/09/2026 (cierre del 3T-2026)</td></tr>
+              <tr><td class="id">3</td><td>Capturar los parámetros P29:P37 conforme a los encabezados del libro master</td><td>Luis Antonio De Anda Bautista</td><td>30/09/2026 (cierre del 3T-2026)</td></tr>
+              <tr><td class="id">4</td><td>Restringir el acceso de edición del libro master o migrarlo al Drive institucional</td><td>Luis Antonio De Anda Bautista</td><td>Antes de la firma del informe</td></tr>
+              <tr><td class="id">5</td><td>Revisar, validar (Aprobado_MIR) y firmar el informe del 3T-2026</td><td>Dr. Pedro Javier Carrasco Rueda Quijano</td><td>Septiembre de 2026</td></tr>
+              <tr><td class="id">6</td><td>Remitir el campo de autorización del uso de la fuerza del formato de la Vicefiscalía en Investigación Especializada en Delitos Patrimoniales</td><td>Fiscalía del Estado</td><td>4T-2026 (octubre–diciembre)</td></tr>
+              <tr><td class="id">7</td><td>Solicitar a UNODC el informe final del Formulario, el estatus del vetting ante INL y la cobertura de C5 y de la Secretaría de Inteligencia y Búsqueda de Personas</td><td>Luis Antonio De Anda Bautista, con Víctor Merchand (UNODC)</td><td>4T-2026 (octubre–diciembre)</td></tr>
+              <tr><td class="id">8</td><td>Definir con UNODC las temáticas y el calendario de la capacitación de tres días</td><td>CGES/DGAPP y UNODC</td><td>4T-2026 (octubre–diciembre)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="border-t border-[#D6DEE6] bg-white">
+  <div class="max-w-7xl mx-auto px-5 lg:px-8 py-6 text-sm text-[#5A6B7D] flex flex-wrap justify-between gap-3">
+    <p>Proyecto RASTROS (UNODC – Gobierno de Jalisco). Coordinación General Estratégica de Seguridad, Dirección General de Análisis y Políticas Públicas.</p>
+    <p>Corte: septiembre de 2026</p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>
+  // Fórmulas: KaTeX con respaldo en texto plano si la librería no carga
+  (function () {
+    if (typeof katex === 'undefined') return;
+    document.querySelectorAll('.formula[data-tex]').forEach(function (el) {
+      try {
+        katex.render(el.getAttribute('data-tex'), el, { displayMode: true, throwOnError: false });
+      } catch (e) { /* se conserva el texto de respaldo */ }
+    });
+  })();
+
+  // Índice con resaltado de la sección visible
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.toc a'));
+    var mapa = {};
+    links.forEach(function (a) { mapa[a.getAttribute('href').slice(1)] = a; });
+    var secciones = links.map(function (a) { return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+    if (!('IntersectionObserver' in window) || !secciones.length) return;
+    var visibles = new Set();
+    var obs = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (e.isIntersecting) visibles.add(e.target.id); else visibles.delete(e.target.id);
+      });
+      var actual = secciones.find(function (s) { return visibles.has(s.id); });
+      links.forEach(function (a) { a.classList.remove('activo'); a.removeAttribute('aria-current'); });
+      if (actual && mapa[actual.id]) {
+        mapa[actual.id].classList.add('activo');
+        mapa[actual.id].setAttribute('aria-current', 'true');
+        if (window.innerWidth < 1024) { var ul = mapa[actual.id].closest('ul'); ul.scrollLeft = mapa[actual.id].offsetLeft - (ul.clientWidth - mapa[actual.id].offsetWidth) / 2; }
+      }
+    }, { rootMargin: '-20% 0px -65% 0px' });
+    secciones.forEach(function (s) { obs.observe(s); });
+  })();
+</script>
+</body>
+</html>
